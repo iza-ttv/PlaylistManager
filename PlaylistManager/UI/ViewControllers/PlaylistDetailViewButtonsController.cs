@@ -94,19 +94,19 @@ namespace PlaylistManager.UI
         [UIAction("delete-click")]
         private void OnDelete()
         {
-            var numberOfSongs = selectedPlaylist.PlaylistLevelPack.AllBeatmapLevels().Count;
-            var checkboxText = numberOfSongs > 0 ? $"Also delete all {numberOfSongs} songs from the game." : "";
-            popupModalsController.ShowYesNoModal(rootTransform, $"Are you sure you would like to delete the playlist \"{selectedPlaylist.Title}\"?", DeleteButtonPressed, checkboxText: checkboxText);
+            // var numberOfSongs = selectedPlaylist.PlaylistLevelPack.AllBeatmapLevels().Count;
+            // var checkboxText = numberOfSongs > 0 ? $"Also delete all {numberOfSongs} songs from the game." : "";
+            popupModalsController.ShowYesNoModal(rootTransform, $"Are you sure you would like to delete the playlist \"{selectedPlaylist.Title}\"?", DeleteButtonPressed/* , checkboxText: checkboxText */);
         }
 
         private void DeleteButtonPressed()
         {
             try
             {
-                if (popupModalsController.CheckboxValue)
-                {
-                    DeleteSongs();
-                }
+                // if (popupModalsController.CheckboxValue)
+                // {
+                //     DeleteSongs();
+                // }
                 DeletePlaylist();
             }
             catch (Exception e)
@@ -116,19 +116,19 @@ namespace PlaylistManager.UI
             }
         }
 
-        private async void DeleteSongs()
-        {
-            popupModalsController.ShowLoadingModal(rootTransform, "Deleting Playlist & Songs");
+        // private async void DeleteSongs()
+        // {
+        //     popupModalsController.ShowLoadingModal(rootTransform, "Deleting Playlist & Songs");
 
-            var levelPaths = selectedPlaylist.BeatmapLevels
-                .Where(l => !l.hasPrecalculatedData)
-                .Select(l => SongCore.Collections.GetLoadedSaveData(l.levelID)?.customLevelFolderInfo.folderPath)
-                .Where(p => p != null)
-                .ToList();
-            await loader.DeleteSongsAsync(levelPaths);
+        //     var levelPaths = selectedPlaylist.BeatmapLevels
+        //         .Where(l => !l.hasPrecalculatedData)
+        //         .Select(l => SongCore.Collections.GetLoadedSaveData(l.levelID)?.customLevelFolderInfo.folderPath)
+        //         .Where(p => p != null)
+        //         .ToList();
+        //     await loader.DeleteSongsAsync(levelPaths);
 
-            popupModalsController.DismissLoadingModal();
-        }
+        //     popupModalsController.DismissLoadingModal();
+        // }
 
         private void DeletePlaylist()
         {

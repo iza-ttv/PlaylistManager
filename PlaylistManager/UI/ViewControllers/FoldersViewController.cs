@@ -33,11 +33,11 @@ namespace PlaylistManager.UI
         private readonly BSMLParser bsmlParser;
 
         private FloatingScreen floatingScreen;
-        private readonly Sprite levelPacksSprite;
-        private readonly Sprite customPacksSprite;
-        private readonly Sprite playlistsSprite;
-        private readonly Sprite foldersSprite;
-        private readonly Sprite folderIcon;
+        private Sprite levelPacksSprite;
+        private Sprite customPacksSprite;
+        private Sprite playlistsSprite;
+        private Sprite foldersSprite;
+        private Sprite folderIcon;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event Action<IReadOnlyList<BeatmapLevelPack>, int> LevelCollectionTableViewUpdatedEvent;
@@ -87,14 +87,18 @@ namespace PlaylistManager.UI
             this.pluginMetadata = pluginMetadata.Value;
             this.bsmlParser = bsmlParser;
 
-            levelPacksSprite = BeatSaberMarkupLanguage.Utilities.FindSpriteInAssembly("PlaylistManager.Icons.LevelPacks.png");
-            customPacksSprite = BeatSaberMarkupLanguage.Utilities.FindSpriteInAssembly("PlaylistManager.Icons.CustomPacks.png");
-            playlistsSprite = BeatSaberMarkupLanguage.Utilities.FindSpriteInAssembly("PlaylistManager.Icons.Playlists.png");
-            foldersSprite = BeatSaberMarkupLanguage.Utilities.FindSpriteInAssembly("PlaylistManager.Icons.Folders.png");
-            folderIcon = BeatSaberMarkupLanguage.Utilities.FindSpriteInAssembly("PlaylistManager.Icons.FolderIcon.png");
-
             tableCells = new List<CustomListTableData.CustomCellInfo>();
             folderMode = FolderMode.None;
+            LoadSprites();
+        }
+
+        private async void LoadSprites()
+        {
+            levelPacksSprite = await BeatSaberMarkupLanguage.Utilities.LoadSpriteFromAssemblyAsync("PlaylistManager.Icons.LevelPacks.png");
+            customPacksSprite = await BeatSaberMarkupLanguage.Utilities.LoadSpriteFromAssemblyAsync("PlaylistManager.Icons.CustomPacks.png");
+            playlistsSprite = await BeatSaberMarkupLanguage.Utilities.LoadSpriteFromAssemblyAsync("PlaylistManager.Icons.Playlists.png");
+            foldersSprite = await BeatSaberMarkupLanguage.Utilities.LoadSpriteFromAssemblyAsync("PlaylistManager.Icons.Folders.png");
+            folderIcon = await BeatSaberMarkupLanguage.Utilities.LoadSpriteFromAssemblyAsync("PlaylistManager.Icons.FolderIcon.png");
         }
 
         public void Initialize()

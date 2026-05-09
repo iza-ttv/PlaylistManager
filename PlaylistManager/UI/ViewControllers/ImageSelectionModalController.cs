@@ -25,7 +25,7 @@ namespace PlaylistManager.UI
         private readonly BSMLParser bsmlParser;
 
         private readonly string IMAGES_PATH = Path.Combine(PlaylistLibUtils.playlistManager.PlaylistPath, "CoverImages");
-        private readonly Sprite playlistManagerIcon;
+        private Sprite playlistManagerIcon;
         private readonly Dictionary<string, CoverImage> coverImages;
         private bool parsed;
         private int selectedIndex;
@@ -65,7 +65,7 @@ namespace PlaylistManager.UI
             }
 
             coverImages = new Dictionary<string, CoverImage>();
-            playlistManagerIcon = BeatSaberMarkupLanguage.Utilities.FindSpriteInAssembly("PlaylistManager.Icons.DefaultIcon.png");
+            BeatSaberMarkupLanguage.Utilities.LoadSpriteFromAssemblyAsync("PlaylistManager.Icons.DefaultIcon.png").ContinueWith(x => { playlistManagerIcon = x.Result; });
             parsed = false;
         }
 

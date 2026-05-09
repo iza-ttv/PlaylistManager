@@ -29,7 +29,7 @@ namespace PlaylistManager.UI
         private List<BeatSaberPlaylistsLib.PlaylistManager> childManagers;
         private List<IPlaylist> childPlaylists;
 
-        private readonly Sprite folderIcon;
+        private Sprite folderIcon;
         private bool parsed;
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -64,7 +64,7 @@ namespace PlaylistManager.UI
             this.popupModalsController = popupModalsController;
             this.pluginMetadata = pluginMetadata.Value;
             this.bsmlParser = bsmlParser;
-            folderIcon = BeatSaberMarkupLanguage.Utilities.FindSpriteInAssembly("PlaylistManager.Icons.FolderIcon.png");
+            BeatSaberMarkupLanguage.Utilities.LoadSpriteFromAssemblyAsync("PlaylistManager.Icons.FolderIcon.png").ContinueWith(x => { folderIcon = x.Result; });
             parsed = false;
         }
 
