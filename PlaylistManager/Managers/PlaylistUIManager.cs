@@ -6,7 +6,7 @@ using PlaylistManager.Configuration;
 using PlaylistManager.Utilities;
 using PlaylistManager.HarmonyPatches;
 using System.Linq;
-using System.Threading;
+using OculusStudios.Platform.Core;
 using PlaylistManager.Downloaders;
 using PlaylistManager.UI;
 
@@ -26,12 +26,13 @@ namespace PlaylistManager.Managers
 
         private readonly List<ILevelCategoryUpdater> levelCategoryUpdaters;
         private readonly IPMRefreshable refreshable;
+        private readonly IPlatform platform;
 
         public event Action<IReadOnlyList<BeatmapLevelPack>, int> LevelCollectionTableViewUpdatedEvent;
 
         internal PlaylistUIManager(AnnotatedBeatmapLevelCollectionsViewController annotatedBeatmapLevelCollectionsViewController, LevelCollectionNavigationController levelCollectionNavigationController,
             SelectLevelCategoryViewController selectLevelCategoryViewController, SettingsViewController settingsViewController, PlaylistSequentialDownloader playlistDownloader,
-            List<ILevelCategoryUpdater> levelCategoryUpdaters, IPMRefreshable refreshable)
+            List<ILevelCategoryUpdater> levelCategoryUpdaters, IPMRefreshable refreshable, [InjectOptional] IPlatform platform)
         {
             this.annotatedBeatmapLevelCollectionsViewController = annotatedBeatmapLevelCollectionsViewController;
             this.levelCollectionNavigationController = levelCollectionNavigationController;
@@ -41,6 +42,7 @@ namespace PlaylistManager.Managers
 
             this.levelCategoryUpdaters = levelCategoryUpdaters;
             this.refreshable = refreshable;
+            this.platform = platform;
         }
 
         public void Initialize()
@@ -143,16 +145,15 @@ namespace PlaylistManager.Managers
             refreshable.Refresh();
         }
 
-        private async void AssignAuthor()
+        private void AssignAuthor()
         {
             if (PluginConfig.Instance.AutomaticAuthorName)
             {
-                // var user = await platformUserModel.GetUserInfo(CancellationToken.None);
-                PluginConfig.Instance.AuthorName = /* user?.userName ?? */ PluginConfig.Instance.AuthorName ?? nameof(PlaylistManager);
-            } 
+                PluginConfig.Instance.AuthorName = platform?.user?.displayName ?? PluginConfig.Instance.AuthorName ?? nameof(PlaylistManager);
+            }
             else
             {
-                PluginConfig.Instance.AuthorName = PluginConfig.Instance.AuthorName;
+                PluginConfig.Instance.AuthorName = PluginConfig.Instance.AuthorName ?? nameof(PlaylistManager);
             }
         }
     }
